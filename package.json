@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-contacts",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Cordova plugin for accessing contacts database",
   "main": "index.js",
   "directories": {
