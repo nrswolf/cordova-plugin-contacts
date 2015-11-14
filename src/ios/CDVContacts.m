@@ -522,6 +522,24 @@
     return;
 }
 
+- (void)showContactsPermission:(CDVInvokedUrlCommand*)command
+{
+  if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
+      ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
+      ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
+          NSLog(@"Access to contacts %@ by user", granted ? @"granted" : @"denied");
+      });
+  } else {
+      NSLog(@"User already has access to contacts, not showing prompt");
+  } 
+} 
+
+- (bool)hasContactsAccess:(CDVInvokedUrlCommand*)command
+{
+  NSLog(@"hasContactsAccess: %d", ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized);
+  return ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized; 
+}
+
 @end
 
 /* ABPersonViewController does not have any UI to dismiss.  Adding navigationItems to it does not work properly

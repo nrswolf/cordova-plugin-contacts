@@ -58,5 +58,21 @@ module.exports = {
             successCallback(fullContact.id, fullContact);
        };
         exec(win, null, "Contacts","chooseContact", [options]);
+    },
+    showContactsPermission: function(successCB, errorCB) {
+      exec(successCB, errorCB, "Contacts", "showContactsPermission", []);
+    },
+    hasContactsAccess: function(successCB, errorCB) {
+      /*
+       *
+       *
+       *
+       */
+      var win = function(access) {
+        successCB(access);
+      };      
+      exec(win, errorCB, "Contacts", "hasContactsAccess", []);
+      
     }
+    
 };

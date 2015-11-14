@@ -107,6 +107,10 @@
  */
 - (void)remove:(CDVInvokedUrlCommand*)command;
 
+
+- (void)showContactsPermission:(CDVInvokedUrlCommand*)command;
+- (bool)hasContactsAccess:(CDVInvokedUrlCommand*)command;
+  
 // - (void) dealloc;
 
 @end
