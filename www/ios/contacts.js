@@ -65,7 +65,10 @@ module.exports = {
        * to work around certain bugs in this plugin due to Apple deprecating 
        * the AddressBook framework.       
        */
-      exec(successCB, errorCB, "Contacts", "showContactsPermission", []);
+      var win = function(access) {
+        successCB(access);
+      };    
+      exec(win, errorCB, "Contacts", "showContactsPermission", []);
     },
     hasContactsAccess: function(successCB, errorCB) {
       /*

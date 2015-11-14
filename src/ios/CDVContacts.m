@@ -528,13 +528,15 @@
         ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
         ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
             NSLog(@"Access to contacts %@ by user", granted ? @"granted" : @"denied");
+            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:granted];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         });
     } else {
         NSLog(@"User already has access to contacts, not showing prompt");
+        
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:true];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
-   
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@""];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 } 
 
 - (void)hasContactsAccess:(CDVInvokedUrlCommand*)command
