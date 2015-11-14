@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-contacts-ios9",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cordova contacts plugin fork with workarounds for ios9",
   "main": "index.js",
   "directories": {
