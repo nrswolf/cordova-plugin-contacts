@@ -524,20 +524,26 @@
 
 - (void)showContactsPermission:(CDVInvokedUrlCommand*)command
 {
-  if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
-      ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
-      ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
-          NSLog(@"Access to contacts %@ by user", granted ? @"granted" : @"denied");
-      });
-  } else {
-      NSLog(@"User already has access to contacts, not showing prompt");
-  } 
+    if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
+        ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
+        ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
+            NSLog(@"Access to contacts %@ by user", granted ? @"granted" : @"denied");
+        });
+    } else {
+        NSLog(@"User already has access to contacts, not showing prompt");
+    }
+   
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@""];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 } 
 
-- (bool)hasContactsAccess:(CDVInvokedUrlCommand*)command
+- (void)hasContactsAccess:(CDVInvokedUrlCommand*)command
 {
-  NSLog(@"hasContactsAccess: %d", ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized);
-  return ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized; 
+    NSLog(@"hasContactsAccess: %d", ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized);
+    bool access = ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized;
+  
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:access];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 @end
