@@ -1,7 +1,7 @@
 {
   "name": "cordova-plugin-contacts-ios9",
-  "version": "0.3.0",
-  "description": "Cordova plugin for accessing contacts database with ios9 improvements",
+  "version": "1.0.0",
+  "description": "Cordova contacts plugin fork with workarounds for ios9",
   "main": "index.js",
   "directories": {
     "doc": "doc",
@@ -17,9 +17,8 @@
   "keywords": [
     "cordova",
     "contacts",
-    "io9",
-    "address book"
-    "address"
+    "address",
+    "ios9"
   ],
   "author": "Steven Elliott <steven@stevenelliott.me> (http://stevenelliott.me/)",
   "license": "Apache-2.0",
