@@ -9,6 +9,22 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  "name": "cordova-plugin-contacts",
+  "version": "2.0.1-dev",
+  "description": "Cordova Contacts Plugin",
+  "cordova": {
+    "id": "cordova-plugin-contacts",
+    "platforms": [
+      "android",
+      "amazon-fireos",
+      "ubuntu",
+      "ios",
+      "blackberry10",
+      "wp8",
+      "firefoxos",
+      "windows8",
+      "windows"
+    ]
   },
   "repository": {
     "type": "git",

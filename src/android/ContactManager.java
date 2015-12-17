@@ -43,7 +43,7 @@ public class ContactManager extends CordovaPlugin {
     private ContactAccessor contactAccessor;
     private CallbackContext callbackContext;        // The callback context from which we were invoked.
     private JSONArray executeArgs;
-    
+
     private static final String LOG_TAG = "Contact Query";
 
     public static final int UNKNOWN_ERROR = 0;
@@ -52,6 +52,7 @@ public class ContactManager extends CordovaPlugin {
     public static final int PENDING_OPERATION_ERROR = 3;
     public static final int IO_ERROR = 4;
     public static final int NOT_SUPPORTED_ERROR = 5;
+    public static final int OPERATION_CANCELLED_ERROR = 6;
     public static final int PERMISSION_DENIED_ERROR = 20;
     private static final int CONTACT_PICKER_RESULT = 1000;
     public static String [] permissions;
@@ -61,6 +62,7 @@ public class ContactManager extends CordovaPlugin {
     public static final int SEARCH_REQ_CODE = 0;
     public static final int SAVE_REQ_CODE = 1;
     public static final int REMOVE_REQ_CODE = 2;
+    public static final int PICK_REQ_CODE = 3;
 
     public static final String READ = Manifest.permission.READ_CONTACTS;
     public static final String WRITE = Manifest.permission.WRITE_CONTACTS;
@@ -95,10 +97,10 @@ public class ContactManager extends CordovaPlugin {
      * @return                  True if the action was valid, false otherwise.
      */
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
-        
+
         this.callbackContext = callbackContext;
-        this.executeArgs = args; 
-        
+        this.executeArgs = args;
+
         /**
          * Check to see if we are on an Android 1.X device.  If we are return an error as we
          * do not support this as of Cordova 1.0.
@@ -146,7 +148,14 @@ public class ContactManager extends CordovaPlugin {
             }
         }
         else if (action.equals("pickContact")) {
-            pickContactAsync();
+            if(cordova.hasPermission(READ))
+            {
+                pickContactAsync();
+            }
+            else
+            {
+                getReadPermission(PICK_REQ_CODE);
+            }
         }
         else {
             return false;
@@ -215,7 +224,7 @@ public class ContactManager extends CordovaPlugin {
         };
         this.cordova.getThreadPool().execute(worker);
     }
-    
+
     /**
      * Called when user picks contact.
      * @param requestCode       The request code originally supplied to startActivityForResult(),
@@ -246,10 +255,11 @@ public class ContactManager extends CordovaPlugin {
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "JSON fail.", e);
                 }
-            } else if (resultCode == Activity.RESULT_CANCELED){
-                this.callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.NO_RESULT, UNKNOWN_ERROR));
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                callbackContext.error(OPERATION_CANCELLED_ERROR);
                 return;
             }
+
             this.callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, UNKNOWN_ERROR));
         }
     }
@@ -275,6 +285,9 @@ public class ContactManager extends CordovaPlugin {
                 break;
             case REMOVE_REQ_CODE:
                 remove(executeArgs);
+                break;
+            case PICK_REQ_CODE:
+                pickContactAsync();
                 break;
         }
     }
